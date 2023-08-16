@@ -13,17 +13,50 @@ const _countdown = (function(){
         return forms[2];
     };
 
-    const hourTimer = (countObj, countdownDate, heroText, heroTimer) => {
+    const hourTimer = (countObj, countdownDate, el, cb) => {
         const thId = setInterval(() => {
             const diff = countdownDate - new Date();
             renderCount(countObj, diff, false);
             if (diff < 0) {
                 clearInterval(thId);
-                heroText.remove();
-                heroTimer.remove();
+                el.remove();
+                cb.remove();
             };
         }, 1000);
-    }
+    };
+
+    const renderHtml = (element, title) => {
+        const tTitle = document.createElement('p');
+        tTitle.className = 'timer__title';
+        tTitle.textContent = title;//'До конца акции осталось:'
+
+        const tdays = document.createElement('p');
+        tdays.className = 'timer__item timer__item_days';
+        const cd = document.createElement('span');
+        cd.className = 'timer__count timer__count_days'; 
+        const ud = document.createElement('span');
+        ud.className = 'timer__units timer__units_days';
+        tdays.append(cd, ud);
+
+        const thours = document.createElement('p');
+        thours.className = 'timer__item timer__item_hours';
+        const ch = document.createElement('span');
+        ch.className = 'timer__count timer__count_hours'; 
+        const uh = document.createElement('span');
+        uh.className = 'timer__units timer__units_hours'; 
+        thours.append(ch, uh);
+
+        const tminutes = document.createElement('p');
+        tminutes.className = 'timer__item timer__item_minutes';
+        const cm = document.createElement('span');
+        cm.className = 'timer__count timer__count_minutes'; 
+        const um = document.createElement('span');
+        um.className = 'timer__units timer__units_minutes'; 
+        tminutes.append(cm, um);
+
+        element.append(tdays, thours, tminutes);
+        return {cd, ud, ch, uh, cm, um}
+    };
 
     const renderCount = (countObj, diff, day = true) => {
         const {cd, ud, ch, uh, cm, um} = countObj;
@@ -59,47 +92,33 @@ const _countdown = (function(){
         }
     };
 
-    const init = (selector, selectorTimer, selectorText) => {
-        const element = document.querySelector(selector);
-        const heroTimer = document.querySelector(selectorTimer);
-        const heroText = document.querySelector(selectorText);
-        const countdownDateStr = element.dataset.timerDeadline;
-        if(countdownDateStr) {    
-            
-            const cd = element.querySelector('.timer__count_days');
-            const ud = element.querySelector('.timer__units_days');
-
-            const ch = element.querySelector('.timer__count_hours');
-            const uh = element.querySelector('.timer__units_hours');
-
-            const cm = element.querySelector('.timer__count_minutes');
-            const um = element.querySelector('.timer__units_minutes');
-
-            const countObj = {cd, ud, ch, uh, cm, um};
-
+    const init = (selector, title, cb) => {
+        const el = document.querySelector(selector);
+        const countdownDateStr = el.dataset.timerDeadline;
+        if(countdownDateStr){
             const countdownDate = parseDate(countdownDateStr, -3);
-
             const diff = countdownDate - new Date();
-            if (diff > 0) {                      
+            if (diff > 0) {
+                const controls = renderHtml(el, title);                      
                 if(diff > (24 * 60 * 60 * 1000)) {                   
-                    renderCount(countObj, countdownDate - new Date());
+                    renderCount(controls, countdownDate - new Date());
                     const tdId = setInterval(() => {                        
                         const diff = countdownDate - new Date();
-                        renderCount(countObj, diff);
+                        renderCount(controls, diff);
                         if (diff < (24 * 60 * 60 * 1000)) {
                             clearInterval(tdId);
-                            hourTimer(countObj, countdownDate, heroText, heroTimer)
+                            hourTimer(countObj, countdownDate, el, cb)
                         }
                     }, (60 * 1000));
 
                 } else {
-                    hourTimer(countObj, countdownDate, heroText, heroTimer)
+                    hourTimer(controls, countdownDate, el, cb)
                 };                
             } else {
-                heroText.remove();
-                heroTimer.remove();
-            };            
-        };        
+                el.remove();
+                cb();
+            };   
+        };      
     };
 
     return {init};
