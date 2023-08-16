@@ -13,25 +13,50 @@ const _countdown = (function(){
         return forms[2];
     };
 
-    const renderCount = (countObj, diff) => {
+    const hourTimer = (countObj, countdownDate, heroText, heroTimer) => {
+        const thId = setInterval(() => {
+            const diff = countdownDate - new Date();
+            renderCount(countObj, diff, false);
+            if (diff < 0) {
+                clearInterval(thId);
+                heroText.remove();
+                heroTimer.remove();
+            };
+        }, 1000);
+    }
+
+    const renderCount = (countObj, diff, day = true) => {
         const {cd, ud, ch, uh, cm, um} = countObj;
         
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const mins = Math.floor(diff / (1000 * 60));
+        const secs = Math.floor(diff / 1000);
 
         const d = days;
         const h = hours - days * 24;
         const m = mins - hours * 60;
+        const s = secs - mins * 60;
 
-        cd.textContent = d;
-        ud.textContent = getWord(d, ['день', 'дня', 'дней']);
-
-        ch.textContent = h;
-        uh.textContent = getWord(h, ['час', 'часа', 'часов']);
-
-        cm.textContent = m;
-        um.textContent = getWord(m, ['минута', 'минуты', 'минут']);
+        if(day) {
+            cd.textContent = d;
+            ud.textContent = getWord(d, ['день', 'дня', 'дней']);
+    
+            ch.textContent = h;
+            uh.textContent = getWord(h, ['час', 'часа', 'часов']);
+    
+            cm.textContent = m;
+            um.textContent = getWord(m, ['минута', 'минуты', 'минут']);
+        } else {
+            cd.textContent = h;
+            ud.textContent = getWord(h, ['час', 'часа', 'часов']);
+    
+            ch.textContent = m;
+            uh.textContent = getWord(m, ['минута', 'минуты', 'минут']);
+    
+            cm.textContent = s;
+            um.textContent = getWord(s, ['секунда','секунды','секунд']);
+        }
     };
 
     const init = (selector, selectorTimer, selectorText) => {
@@ -55,20 +80,21 @@ const _countdown = (function(){
             const countdownDate = parseDate(countdownDateStr, -3);
 
             const diff = countdownDate - new Date();
-            if (diff > 0) {
-                renderCount(countObj, countdownDate - new Date());
+            if (diff > 0) {                      
+                if(diff > (24 * 60 * 60 * 1000)) {                   
+                    renderCount(countObj, countdownDate - new Date());
+                    const tdId = setInterval(() => {                        
+                        const diff = countdownDate - new Date();
+                        renderCount(countObj, diff);
+                        if (diff < (24 * 60 * 60 * 1000)) {
+                            clearInterval(tdId);
+                            hourTimer(countObj, countdownDate, heroText, heroTimer)
+                        }
+                    }, (60 * 1000));
 
-                const tId = setInterval(() => {
-                    
-                    const diff = countdownDate - new Date();
-                    renderCount(countObj, diff);
-                    if (diff < 0) {
-                        clearInterval(tId);
-                        heroText.remove();
-                        heroTimer.remove();
-                    }
-
-                }, (60 * 1000));
+                } else {
+                    hourTimer(countObj, countdownDate, heroText, heroTimer)
+                };                
             } else {
                 heroText.remove();
                 heroTimer.remove();
