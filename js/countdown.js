@@ -1,11 +1,13 @@
 const _countdown = (function(){
-    const parseDate = (dateStr) => {
+    const parseDate = (dateStr, offset) => {
         const [dd, mm, yyyy] = dateStr.split('/');
-        return new Date(yyyy, parseInt(mm)-1, dd);
+        console.log(new Date(Date.UTC(yyyy, parseInt(mm)-1, dd, offset)));
+        return new Date(Date.UTC(yyyy, parseInt(mm)-1, dd, offset));
     };
 
     const getWord = (n, forms) => {
         let u = n % 10;
+        if (n > 10 && n < 20) return forms[2];
         if (u == 1) return forms[0];
         if (u > 1 && u <5) return forms[1];
         return forms[2];
@@ -50,7 +52,7 @@ const _countdown = (function(){
 
             const countObj = {cd, ud, ch, uh, cm, um};
 
-            const countdownDate = parseDate(countdownDateStr);
+            const countdownDate = parseDate(countdownDateStr, -3);
 
             const diff = countdownDate - new Date();
             if (diff > 0) {
