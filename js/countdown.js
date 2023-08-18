@@ -1,7 +1,7 @@
-const _countdown = (function(){
+export const _countdown = (function(){
     const parseDate = (dateStr, offset) => {
         const [dd, mm, yyyy] = dateStr.split('/');
-        console.log(new Date(Date.UTC(yyyy, parseInt(mm)-1, dd, offset)));
+        //console.log(new Date(Date.UTC(yyyy, parseInt(mm)-1, dd, offset)));
         return new Date(Date.UTC(yyyy, parseInt(mm)-1, dd, offset));
     };
 
