@@ -46,8 +46,7 @@ const calcPlanePos = () => {
     plane.style.transform = `translateY(${-move}px) rotate(180deg)`; 
     }
     lastScrollTop =
-    scrollTopPosition <= 0 ? 0 : scrollTopPosition; 
-
+    scrollTopPosition <= 0 ? 0 : scrollTopPosition;
 };
 
 window.addEventListener('scroll', () => {
