@@ -1,6 +1,7 @@
 import { _countdown } from './countdown.js';
 import { _accordion } from './accord.js';
 import { _burger } from './burger.js';
+import './animation.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     _countdown.init('[data-timer-deadline]', 
