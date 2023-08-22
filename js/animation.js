@@ -9,7 +9,8 @@ plane.style.cssText = `
   right: 0;
   pointer-events: none;
   background: url('/img/anim/airplane.svg') center/contain no-repeat;
-  /* transform: rotate(180deg); */ 
+  /* transform: rotate(180deg); */
+  transition: rotate 2s;
 `;
 
 document.body.append(plane);
@@ -39,11 +40,13 @@ const calcPlanePos = () => {
 
     if (scrollTopPosition >= lastScrollTop) {
     // console.log('scrolling down');
-    plane.style.transform = `translateY(${-move}px) rotate(0deg)`;
+        plane.style.transform = `translateY(${-move}px) rotate(0deg)`;
+        // plane.style.rotate = `0deg`;
 
     } else {
     // console.log('scrolling up');
-    plane.style.transform = `translateY(${-move}px) rotate(180deg)`; 
+        plane.style.transform = `translateY(${-move}px) rotate(180deg)`; 
+        // plane.style.rotate = `180deg`;
     }
     lastScrollTop =
     scrollTopPosition <= 0 ? 0 : scrollTopPosition;
