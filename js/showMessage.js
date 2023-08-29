@@ -47,8 +47,6 @@ export const showModal = (message, type = STATUS.info) => {
     const messageP = document.createElement('p');
     const button = document.createElement('button');
 
-    //overlay.style.cssText = 'position:fixed;inset:0;z-index:100;background-color: transparent !important;';
-
     overlay.style.cssText = `
         background-color: rgba(0, 0, 0, 0.6);
         bottom: 0;
@@ -128,12 +126,9 @@ export const showModal = (message, type = STATUS.info) => {
 
     button.addEventListener('click', () => {
         overlay.remove();
-    })
+    });
 
     overlay.addEventListener('click', (e) => {
         if(e.target === overlay) e.target.remove();
-    })
-
-
-
+    });
 };
