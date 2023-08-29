@@ -15,6 +15,8 @@ plane.style.cssText = `
 
 document.body.append(plane);
 plane.style.bottom = `-${plane.clientHeight}px`;
+plane.style.transitionProperty = 'rotate';
+plane.style.transitionDuration = '5s';
 
 let lastScrollTop =
   window.pageYOffset || document.documentElement.scrollTop;
@@ -37,6 +39,7 @@ const calcPlanePos = () => {
     const move = maxTop * (percent / 100);
     // console.log('percent: ', percent);
     // plane.style.transform = `translateY(${-move}px)`;
+    
 
     if (scrollTopPosition >= lastScrollTop) {
     // console.log('scrolling down');

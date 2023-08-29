@@ -115,12 +115,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     clearSelect(tourDate);
 
     const reservDate = document.querySelector('#reservation__date')
+    reservDate.required = true;
     clearSelect(reservDate)
 
     const tourPeople = document.querySelector('#tour__people');
     clearSelect(tourPeople);
 
     const reservPeople = document.querySelector('#reservation__people')
+    reservPeople.required = true;
     clearSelect(reservPeople);
 
     fillDateSelect(tourDate, tours.all);

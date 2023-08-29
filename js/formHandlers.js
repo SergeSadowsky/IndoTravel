@@ -1,4 +1,4 @@
-import { STATUS, showMessage } from "./showMessage.js";
+import { STATUS, showMessage, removeMessage, showModal } from "./showMessage.js";
 
 // https://jsonplaceholder.typicode.com/posts
 const SERVER_URL = 'https://jsonplaceholder.typicode.com/posts';
@@ -33,14 +33,6 @@ const bookingForm = document.querySelector('.reservation__form');
 bookingForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const target = e.target;
-    if(target.reservation__date.value === '') { 
-        showMessage(target, 'Ошибка. Укажите дату', STATUS.err);
-        return;
-    }
-    if(target.reservation__people.value === '') {
-        showMessage(target, 'Ошибка. укажите количество.', STATUS.err);
-        return; 
-    }
 
     const data = {
         title: `Резервация. ${target.reservation__name.value}`,
@@ -54,11 +46,14 @@ bookingForm.addEventListener('submit', (e) => {
     };
     showMessage(target, 'Отправка...', STATUS.warn);
     sendData(data, (err, data) => {
+        removeMessage(target);
         if(err){
-            showMessage(target, 'Оопс... Что-то пошло не так. Попробуйте позже.', STATUS.err);
+            // showMessage(target, 'Оопс... Что-то пошло не так. Попробуйте позже.', STATUS.err);
+            showModal('Не удалось отправить заявку. Пожалуйста, повторите отправку ещё раз.', STATUS.err);
         } else {
             target.reset();
-            showMessage(target, 'Информация успешно отправлена. Наш менеджер свяжется с вами.');
+            showModal('Наши менеджеры свяжутся с вами в течение 3-х рабочих дней.');
+            // showMessage(target, 'Информация успешно отправлена. Наш менеджер свяжется с вами.');
         }
     });
 });
