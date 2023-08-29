@@ -1,61 +1,45 @@
-import { STATUS, showMessage, removeMessage, showModal } from "./showMessage.js";
-
-// https://jsonplaceholder.typicode.com/posts
-const SERVER_URL = 'https://jsonplaceholder.typicode.com/posts';
-
-const sendData  = (data, cb) => {        
-    try {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', SERVER_URL);
-        xhr.setRequestHeader('Content-Type','Application/json');
-    
-        xhr.addEventListener('load', () => {
-            if(xhr.status < 200 || xhr.status >= 300) {
-                cb(new Error(xhr.status), xhr.response);
-                return;
-            };
-
-            const data = JSON.parse(xhr.response);
-            cb(null, data);
-        });
-    
-        xhr.addEventListener('error', () => {
-            cb(new Error(xhr.status), xhr.response);
-        })
-
-        xhr.send(JSON.stringify(data));
-    } catch (err) {
-        cb(new Error(err));
-    };
-};
+import { showBookingModal } from "./showBookingModal.js";
+import { sendData } from "./sendData.js";
+// import { STATUS, showMessage, removeMessage, showModal } from "./showMessage.js";
 
 const bookingForm = document.querySelector('.reservation__form');
-bookingForm.addEventListener('submit', (e) => {
+bookingForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const target = e.target;
 
-    const data = {
-        title: `Резервация. ${target.reservation__name.value}`,
-        body: { 
-            Client: target.reservation__name.value,
-            Phone: target.reservation__phone.value,
-            TourDate: target.reservation__date.value,
-            People: target.reservation__people.value,
-            Price: target.querySelector('.reservation__price').textContent,
-        },
+    // const data = {
+    //     title: `Резервация. ${target.reservation__name.value}`,
+    //     body: { 
+    //         Client: target.reservation__name.value,
+    //         Phone: target.reservation__phone.value,
+    //         TourDate: target.reservation__date.value,
+    //         People: target.reservation__people.value,
+    //         Price: target.querySelector('.reservation__price').textContent,
+    //     },
+    // };
+    // showMessage(target, 'Отправка...', STATUS.warn);
+    // sendData(data, (err, data) => {
+    //     removeMessage(target);
+    //     if(err){
+    //         // showMessage(target, 'Оопс... Что-то пошло не так. Попробуйте позже.', STATUS.err);
+    //         showModal('Не удалось отправить заявку. Пожалуйста, повторите отправку ещё раз.', STATUS.err);
+    //     } else {
+    //         target.reset();
+    //         showModal('Наши менеджеры свяжутся с вами в течение 3-х рабочих дней.');
+    //         // showMessage(target, 'Информация успешно отправлена. Наш менеджер свяжется с вами.');
+    //     }
+    // });
+    const data = { 
+        client: target.reservation__name.value,
+        phone: target.reservation__phone.value,
+        tourDate: target.querySelector('.reservation__data').textContent,
+        people: target.reservation__people.value,
+        price: target.querySelector('.reservation__price').textContent,
     };
-    showMessage(target, 'Отправка...', STATUS.warn);
-    sendData(data, (err, data) => {
-        removeMessage(target);
-        if(err){
-            // showMessage(target, 'Оопс... Что-то пошло не так. Попробуйте позже.', STATUS.err);
-            showModal('Не удалось отправить заявку. Пожалуйста, повторите отправку ещё раз.', STATUS.err);
-        } else {
-            target.reset();
-            showModal('Наши менеджеры свяжутся с вами в течение 3-х рабочих дней.');
-            // showMessage(target, 'Информация успешно отправлена. Наш менеджер свяжется с вами.');
-        }
-    });
+    const result = await showBookingModal(data);
+    if (result) {
+        Array.from(target.elements).forEach(el => el.disabled = true);
+    };
 });
 
 const footerForm = document.querySelector('.footer__form');

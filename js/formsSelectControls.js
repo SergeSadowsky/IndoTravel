@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const clearSelect = (el) => {
-        // const el = document.querySelector(selector);
         const options = el.querySelectorAll('option');
         options.forEach((o, index) => {
             if (index !== 0) o.remove();
@@ -24,9 +23,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const option = document.createElement('option');
             option.value = element['date'];
             option.textContent = element['date'];
-            // console.log('element: ', element);
-            // option.dataset.minPeople = element['min-people'];
-            // option.dataset.maxPeople = element['max-people'];
             el.append(option);
         });
     };
