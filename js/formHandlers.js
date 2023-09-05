@@ -1,12 +1,28 @@
 import { showBookingModal } from "./showBookingModal.js";
 import { sendData } from "./sendData.js";
+import { STATUS, showMessage, removeMessage } from "./showMessage.js";
 // import { STATUS, showMessage, removeMessage, showModal } from "./showMessage.js";
 
 const bookingForm = document.querySelector('.reservation__form');
+
+bookingForm.reservation__name.addEventListener('input', (e) => {
+    e.target.value = e.target.value.replace(/[^а-я\u0020]/ig,'');
+});
+
+bookingForm.reservation__phone.addEventListener('input', (e) => {
+    e.target.value = e.target.value.replace(/[^\d\+]/ig,'');
+});
+
 bookingForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const target = e.target;
 
+    const reFIO = /([А-яа-я]+)([\u0020][А-яа-я]+){2,}/;
+    if(!reFIO.test(target.reservation__name.value)){
+        showMessage(target, 'Укажите фамилию, имя, отчество полностью.', STATUS.err);
+        return;
+    };
+    
     // const data = {
     //     title: `Резервация. ${target.reservation__name.value}`,
     //     body: { 
