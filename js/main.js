@@ -5,11 +5,12 @@ import { _burger } from './burger.js';
 import './formsSelectControls.js';
 import './animation.js';
 import './formHandlers.js';
+import './swiper.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     _countdown.init('[data-timer-deadline]',
         'До конца акции осталось:',
-        () => { document.querySelector('.hero__text').remove() }
+        () => { document.querySelector('.hero__text').remove(); }
     );
 });
 
@@ -20,4 +21,3 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     _burger.init('.header__menu-button', '.header__menu');
 });
-

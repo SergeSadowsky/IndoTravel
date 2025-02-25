@@ -1498,8 +1498,8 @@ p {
 		border-radius: 50%;
 }
 
-.album__left:focus {
-		background-color: #AFAFAF;
+.album__left:hover {
+		background-color: #FCB500 /* #AFAFAF; */
 }
 
 .album__left:active {
@@ -1525,8 +1525,8 @@ p {
 		border-radius: 50%;
 }
 
-.album__right:focus {
-		background-color: #AFAFAF;
+.album__right:hover {
+		background-color: #FCB500 /* #AFAFAF; */
 }
 
 .album__right:active {
@@ -1658,7 +1658,7 @@ p {
 		flex-direction: column;
 		-ms-flex-preferred-size: 45%;
 		flex-basis: 45%;
-		height: 99px;
+		min-height: 99px;
 }
 
 .reservation__input-wrap:focus {
@@ -1683,6 +1683,10 @@ p {
 		font-size: 16px;
 		line-height: 130%;
 		opacity: 0.7;
+}
+
+.reservation__input__error {
+	padding-top: 5px;
 }
 
 .reservation__contacts {
@@ -1871,6 +1875,12 @@ p {
 		font-size: 16px;
 		line-height: 130%;
 		color: #fff;
+}
+
+.footer__input__error {
+	color: red;
+	background-color: rgba(237, 185, 0, 0.3);
+	padding: 5px; 
 }
 
 .footer__input-wrap {

@@ -1,6 +1,7 @@
 import { showBookingModal } from "./showBookingModal.js";
 import { sendData } from "./sendData.js";
 import { STATUS, showMessage, removeMessage } from "./showMessage.js";
+import { bookingFormValidator, footerFormValidator } from "./formValidators.js";
 // import { STATUS, showMessage, removeMessage, showModal } from "./showMessage.js";
 
 const bookingForm = document.querySelector('.reservation__form');
@@ -9,19 +10,23 @@ bookingForm.reservation__name.addEventListener('input', (e) => {
     e.target.value = e.target.value.replace(/[^а-я\u0020]/ig,'');
 });
 
-bookingForm.reservation__phone.addEventListener('input', (e) => {
-    e.target.value = e.target.value.replace(/[^\d\+]/ig,'');
-});
+// bookingForm.reservation__phone.addEventListener('input', (e) => {
+//     e.target.value = e.target.value.replace(/[^\d\+]/ig,'');
+// });
 
-bookingForm.addEventListener('submit', async (e) => {
+const inputMask = new Inputmask("+7 (999) 999-99-99");
+inputMask.mask(bookingForm.reservation__phone);
+
+//bookingForm.addEventListener('submit', 
+bookingFormValidator(bookingForm, async (e) => {
     e.preventDefault();
     const target = e.target;
 
-    const reFIO = /([А-яа-я]+)([\u0020][А-яа-я]+){2,}/;
-    if(!reFIO.test(target.reservation__name.value)){
-        showMessage(target, 'Укажите фамилию, имя, отчество полностью.', STATUS.err);
-        return;
-    };
+    // const reFIO = /([А-яа-я]+)([\u0020][А-яа-я]+){2,}/;
+    // if(!reFIO.test(target.reservation__name.value)){
+    //     showMessage(target, 'Укажите фамилию, имя, отчество полностью.', STATUS.err);
+    //     return;
+    // };
     
     // const data = {
     //     title: `Резервация. ${target.reservation__name.value}`,
@@ -52,6 +57,7 @@ bookingForm.addEventListener('submit', async (e) => {
         people: target.reservation__people.value,
         price: target.querySelector('.reservation__price').textContent,
     };
+
     const result = await showBookingModal(data);
     if (result) {
         Array.from(target.elements).forEach(el => el.disabled = true);
@@ -59,12 +65,13 @@ bookingForm.addEventListener('submit', async (e) => {
 });
 
 const footerForm = document.querySelector('.footer__form');
-footerForm.addEventListener('submit', (e) => {
+Inputmask("email").mask(footerForm.footer__email);
+footerFormValidator(footerForm,(e) => {
     e.preventDefault();
     const target = e.target;
     const data = {
         title: 'Вопрос по туру',
-        body: `Email: ${target.querySelector('.footer__input').value}`,
+        body: `Email: ${target.footer__email.value}`,
     };
     let p = target.querySelector('.footer__status-text');
     if(!p){
